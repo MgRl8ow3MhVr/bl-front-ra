@@ -1,11 +1,13 @@
 import { fetchUtils } from "react-admin";
 import { DataProvider } from "react-admin";
 import { ApiData } from "./types/types";
-import { apiUrl, mediaUrl } from "./config";
-import { stat } from "fs";
 
 const httpClient = fetchUtils.fetchJson;
 
+const apiUrl = import.meta.env.VITE_API_URL;
+const mediaUrl = import.meta.env.VITE_MEDIA_URL;
+
+// Make this it simplier
 const Tbd = async (resource: string, params: any) => {
   const { json, headers } = await httpClient("tbd", {
     signal: params.signal,
@@ -58,11 +60,9 @@ const customDataProvider: DataProvider = {
     // populating handling (has to be generalized for any new table)
     let query = "?populate[photo][fields][0]=url";
     const { json } = await httpClient(url + query);
-    console.log("start");
     await new Promise((res, rej) => {
       setTimeout(res, 2000);
     });
-    console.log("cont");
     return {
       data: {
         ...json.data.attributes,
